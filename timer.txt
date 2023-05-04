@@ -1,0 +1,1 @@
+0 * * * * /bin/bash "echo hello > /var/www/html/test2.html" >/dev/null 2>&1
