@@ -23,11 +23,13 @@ RUN rm -Rv /var/www/html/* && \
     service apache2 start
  #   echo testing > /var/www/html/testing.html
 #make cron and redirect logs to console
+COPY pull.sh /pull.sh
 RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
-    ln -sf /proc/self/fd/1 /var/log/apache2/error.log
+    ln -sf /proc/self/fd/1 /var/log/apache2/error.log ** \
+    chmod 777 /pull.sh
 COPY timer.txt /cronjob/timer.txt
-COPY pull.sh /pull.sh
+
 #   && git clone ${ghurl} /var/www/html/
 #COPY phptest.php /var/www/html/phptest.php
 #expose port 80 from container
