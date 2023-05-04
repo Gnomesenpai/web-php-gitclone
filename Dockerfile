@@ -1,4 +1,5 @@
 FROM debian:latest
+ENV DEBIAN_FRONTEND=noninteractive
 ENV ghurl=
 
 #RUN mkdir /website
@@ -9,9 +10,9 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get install --no-install-re
     echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 #install apache2 and php
 RUN apt-get update && apt-get install --no-install-recommends apache2  \
-    php libapache2-mod-php php8.1-mysql php8.1-common php8.1-mysql php8.1-xml php8.1-xmlrpc \
-    php8.1-curl php8.1-gd php8.1-imagick php8.1-cli php8.1-dev php8.1-imap php8.1-mbstring php8.1-opcache php8.1-soap php8.1-zip php8.1-intl -y && \
-    rm -rf /var/lib/apt/lists/*
+    php libapache2-mod-php  php8.1-common php8.1-mysql php8.1-xml php8.1-xmlrpc \
+    php8.1-curl php8.1-gd php8.1-imagick php8.1-cli php8.1-dev  php8.1-mbstring php8.1-opcache php8.1-soap php8.1-zip php8.1-intl -y && \
+    rm -rf /var/lib/apt/lists/* && apt-get clean
 #copy apache2 modified default host
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
@@ -27,7 +28,7 @@ RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 COPY timer.txt /cronjob/timer.txt
-#   && git clone ${ghurl}
+#   && git clone ${ghurl} /var/www/html/
 COPY phptest.php /var/www/html/phptest.php
 #expose port 80 from container
 EXPOSE 80
