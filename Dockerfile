@@ -34,5 +34,6 @@ EXPOSE 80
 CMD [ "/bin/bash","-c","echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
 STOPSIGNAL SIGWINCH
 #basic healthcheck
+
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost/ || exit 1
