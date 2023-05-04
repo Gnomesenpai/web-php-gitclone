@@ -3,7 +3,7 @@ FROM debian:latest
 #RUN mkdir /website
 #WORKDIR /website
 #install dependencies for PHP
-RUN apt update && apt dist-upgrade -y && apt install wget gpg curl lsb-release apt-transport-https ca-certificates
+RUN apt update && apt dist-upgrade -y && apt install wget gpg curl lsb-release apt-transport-https ca-certificates -y
 
 #add PHP to sources
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
