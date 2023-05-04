@@ -32,7 +32,7 @@ COPY timer.txt /cronjob/timer.txt
 #expose port 80 from container
 EXPOSE 80
 STOPSIGNAL SIGWINCH
-CMD [ "/bin/bash","-c","rm -R /var/www/html/* .git .github && git clone $ghurl /var/www/html/ && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
+CMD [ "/bin/bash","-c","git clone $ghurl /var/www/html/ && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
 
 #basic healthcheck
 HEALTHCHECK --interval=5m --timeout=3s \
