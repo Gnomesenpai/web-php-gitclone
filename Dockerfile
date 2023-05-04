@@ -24,10 +24,8 @@ RUN rm -Rv /var/www/html/* && \
     echo testing > /var/www/html/testing.html
 #make cron
 RUN mkdir /cronjob && \
-sed -ri \
-		-e 's!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g' \
-		-e 's!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g' \
-		"$HTTPD_PREFIX/conf/httpd.conf" \
+    ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
+    ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 COPY timer.txt /cronjob/timer.txt
 #   && git clone ${ghurl}
 COPY phptest.php /var/www/html/phptest.php
