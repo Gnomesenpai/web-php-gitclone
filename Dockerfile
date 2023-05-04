@@ -1,4 +1,4 @@
-FROM debain:latest
+FROM debian:latest
 
 #RUN mkdir /website
 #WORKDIR /website
