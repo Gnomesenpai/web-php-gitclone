@@ -26,7 +26,7 @@ RUN rm -Rv /var/www/html/* && \
 COPY pull.sh /pull.sh
 RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
-    ln -sf /proc/self/fd/1 /var/log/apache2/error.log ** \
+    ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
     chmod 777 /pull.sh
 COPY timer.txt /cronjob/timer.txt
 
