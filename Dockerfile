@@ -1,11 +1,10 @@
 FROM debian:latest
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ghurl=
-
 #RUN mkdir /website
 #WORKDIR /website
 #install dependencies for PHP
-RUN apt-get update && apt-get dist-upgrade -y && apt-get install --no-install-recommends wget gpg cron git curl lsb-release apt-transport-https ca-certificates -y \
+RUN apt-get update && apt-get install --no-install-recommends wget gpg cron git curl lsb-release apt-transport-https ca-certificates -y \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 #install apache2 and php
@@ -21,19 +20,20 @@ VOLUME [ "/var/www/html" ]
 WORKDIR /var/www/html
 RUN rm -Rv /var/www/html/* && \
     service apache2 stop && \
-    service apache2 start && \
-    echo testing > /var/www/html/testing.html
-#make cron
+    service apache2 start
+ #   echo testing > /var/www/html/testing.html
+#make cron and redirect logs to console
 RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 COPY timer.txt /cronjob/timer.txt
 #   && git clone ${ghurl} /var/www/html/
-COPY phptest.php /var/www/html/phptest.php
+#COPY phptest.php /var/www/html/phptest.php
 #expose port 80 from container
 EXPOSE 80
-CMD [ "/bin/bash","-c","echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
 STOPSIGNAL SIGWINCH
+CMD [ "/bin/bash","-c","git clone $ghurl /var/www/html/ && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
+
 #basic healthcheck
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost/ || exit 1
