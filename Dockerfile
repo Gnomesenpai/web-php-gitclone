@@ -27,12 +27,13 @@ RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 COPY timer.txt /cronjob/timer.txt
+COPY pull.sh /pull.sh
 #   && git clone ${ghurl} /var/www/html/
 #COPY phptest.php /var/www/html/phptest.php
 #expose port 80 from container
 EXPOSE 80
 STOPSIGNAL SIGWINCH
-CMD [ "/bin/bash","-c","git clone $ghurl /var/www/html/ && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
+CMD [ "/bin/bash","-c","cd / && ./pull.sh && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
 
 #basic healthcheck
 HEALTHCHECK --interval=5m --timeout=3s \
