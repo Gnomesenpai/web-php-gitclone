@@ -30,7 +30,7 @@ RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
     chmod 777 /pull.sh && chmod 777 /cron.sh && \
-    echo '0 5 * * * cd / && ./cron.sh >/dev/null 2>&1' >> /cronjob/timer.txt 
+    echo '0 5 * * * root cd / && ./cron.sh >/dev/null 2>&1' >> /cronjob/timer.txt 
   
 #COPY timer.txt /cronjob/timer.txt
 
