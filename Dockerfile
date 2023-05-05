@@ -39,7 +39,8 @@ RUN mkdir /cronjob && \
 #expose port 80 from container
 EXPOSE 80
 STOPSIGNAL SIGWINCH
-CMD [ "/bin/bash","-c","cd / && ./pull.sh && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
+#CMD [ "/bin/bash","-c","cd / && ./pull.sh && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
+CMD [ "/bin/bash","-c","cd /var/www/html && while true; do git pull; sleep 10; done && apachectl -D FOREGROUND"]
 
 #basic healthcheck
 #HEALTHCHECK --interval=5m --timeout=3s \
