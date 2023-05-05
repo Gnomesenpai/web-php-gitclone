@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends wget gpg cron git 
 RUN apt-get update && apt-get install --no-install-recommends apache2  \
     php libapache2-mod-php  php8.1-common php8.1-mysql php8.1-xml php8.1-xmlrpc \
     php8.1-curl php8.1-gd php8.1-imagick php8.1-cli php8.1-dev  php8.1-mbstring php8.1-opcache php8.1-soap php8.1-zip php8.1-intl -y && \
-    rm -rf /var/lib/apt/lists/* && apt-get clean
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 #copy apache2 modified default host
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
@@ -24,11 +24,12 @@ RUN rm -Rv /var/www/html/* && \
  #   echo testing > /var/www/html/testing.html
 #make cron and redirect logs to console
 COPY pull.sh /pull.sh
+RUN echo '0 5 * * * cd /var/www/html/ && git pull >/dev/null 2>&1' >> /crontab/timer.txt 
 RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
     chmod 777 /pull.sh
-COPY timer.txt /cronjob/timer.txt
+#COPY timer.txt /cronjob/timer.txt
 
 #   && git clone ${ghurl} /var/www/html/
 #COPY phptest.php /var/www/html/phptest.php
