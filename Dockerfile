@@ -42,5 +42,5 @@ STOPSIGNAL SIGWINCH
 CMD [ "/bin/bash","-c","cd / && ./pull.sh && echo /cronjob/timer.txt > /etc/crontab && cron && apachectl -D FOREGROUND"]
 
 #basic healthcheck
-HEALTHCHECK --interval=5m --timeout=3s \
-  CMD curl -f http://localhost/ || exit 1
+#HEALTHCHECK --interval=5m --timeout=3s \
+#  CMD curl -f http://localhost/ || exit 1
