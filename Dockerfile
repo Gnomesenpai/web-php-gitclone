@@ -24,11 +24,12 @@ RUN rm -Rv /var/www/html/* && \
  #   echo testing > /var/www/html/testing.html
 #make cron and redirect logs to console
 COPY pull.sh /pull.sh
-RUN echo '0 5 * * * cd /var/www/html/ && git pull >/dev/null 2>&1' >> /crontab/timer.txt 
+#RUN echo '0 5 * * * cd /var/www/html/ && git pull >/dev/null 2>&1' >> /crontab/timer.txt 
 RUN mkdir /cronjob && \
     ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
     ln -sf /proc/self/fd/1 /var/log/apache2/error.log && \
-    chmod 777 /pull.sh
+    chmod 777 /pull.sh && \
+    echo '0 5 * * * cd /var/www/html/ && git pull >/dev/null 2>&1' >> /crontab/timer.txt 
 #COPY timer.txt /cronjob/timer.txt
 
 #   && git clone ${ghurl} /var/www/html/
