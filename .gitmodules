@@ -2,3 +2,4 @@
 	path = Website
 	url = https://github.com/redsandbikes/Website
 	branch = main
+	recurse = true
